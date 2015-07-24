@@ -1,7 +1,7 @@
 {
   "name": "virtual-dom-starter",
   "scripts": {
-    "build": "browserify main.js | uglifyjs -cm > public/bundle.js",
+    "build": "browserify browser/main.js | uglifyjs -cm > public/bundle.js",
     "start": "node server.js",
     "dev": "npm run start & npm run watch",
     "watch": "watchify browser/main.js -o public/bundle.js -dv"
