@@ -6,8 +6,6 @@ See https://github.com/Raynos/mercury/issues/55
 
 [view the starter demo](http://substack.neocities.org/virtual_dom_starter.html)
 
-See https://github.com/Raynos/mercury/issues/55
-
 See the [virtualize branch](https://github.com/nichoth/virtual-dom-server-rendering/tree/virtualize) for an example of serializing initial state on the server and including it with the html.
 
 # quick start
