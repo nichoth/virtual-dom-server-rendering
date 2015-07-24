@@ -2,7 +2,7 @@
   "name": "virtual-dom-starter",
   "scripts": {
     "build": "browserify main.js | uglifyjs -cm > public/bundle.js",
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "dev": "npm run start & npm run watch",
     "watch": "watchify browser/main.js -o public/bundle.js -dv"
   },
@@ -10,6 +10,7 @@
     "browserify": "^10.2.6",
     "ecstatic": "~0.8.0",
     "hyperstream": "^1.2.2",
+    "json-globals": "^0.2.1",
     "main-loop": "^3.1.0",
     "uglifyjs": "~2.4.10",
     "vdom-to-html": "^2.1.1",
