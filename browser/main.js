@@ -1,4 +1,5 @@
 var main = require('main-loop');
+var virtualize = require('vdom-virtualize');
 var state = {n: 0};
 var render = require('../render.js')({
   onclick: function() {
@@ -6,13 +7,22 @@ var render = require('../render.js')({
     loop.update(state);
   }
 });
-var loop = main(state, render, {
-  create: require('virtual-dom/create-element'),
-  diff: require('virtual-dom/diff'),
-  patch: require('virtual-dom/patch')
-});
 
 var root = document.getElementById('content');
+var serverTree = virtualize(root.firstChild);
+var clientTree = render(state);
+
+var patch = require('virtual-dom/patch');
+var diff = require('virtual-dom/diff');
+
+var loop = main(state, render, {
+  create: require('virtual-dom/create-element'),
+  diff: diff,
+  patch: patch,
+  initialTree: serverTree,
+  target: patch(root.firstChild, diff(serverTree, clientTree))
+});
+
 root.innerHTML = '';
 root.appendChild(loop.target);
 
