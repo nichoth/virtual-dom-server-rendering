@@ -1,4 +1,4 @@
-# virtual-dom-starter
+# virtual-dom with server side rendering
 
 [virtual-dom](https://npmjs.com/package/virtual-dom) demo using the same rendering logic on client and server.
 
