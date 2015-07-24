@@ -2,6 +2,8 @@
 
 [virtual-dom](https://npmjs.com/package/virtual-dom) demo using the same rendering logic on client and server.
 
+See https://github.com/Raynos/mercury/issues/55
+
 [view the starter demo](http://substack.neocities.org/virtual_dom_starter.html)
 
 See https://github.com/Raynos/mercury/issues/55
