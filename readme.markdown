@@ -1,17 +1,13 @@
 # virtual-dom-starter
 
-bare-bones [virtual-dom](https://npmjs.com/package/virtual-dom) starter
-using [main-loop](https://npmjs.com/package/main-loop)
-and [browserify](http://browserify.org)/[watchify](https://npmjs.com/package/watchify)
-with [npm run scripts](http://substack.net/task_automation_with_npm_run)
+[virtual-dom](https://npmjs.com/package/virtual-dom) demo using the same rendering logic on client and server.
 
 [view the starter demo](http://substack.neocities.org/virtual_dom_starter.html)
 
 # quick start
 
 ```
-$ npm run watch &
-$ npm start
+$ npm run dev
 ```
 
 # commands
@@ -20,23 +16,75 @@ $ npm start
 * `npm run watch` - automatically build js on file changes for development
 * `npm start` - start a development server
 
-# starter code
+# client code
 
 ``` js
-var h = require('virtual-dom/h')
-var main = require('main-loop')
-var loop = main({ n: 0 }, render, require('virtual-dom'))
-document.querySelector('#content').appendChild(loop.target)
-
-function render (state) {
-  return h('div', [
-    h('h1', 'clicked ' + state.n + ' times'),
-    h('button', { onclick: onclick }, 'click me!')
-  ])
-  function onclick () {
-    loop.update({ n: state.n + 1 })
+var main = require('main-loop');
+var state = {n: 0};
+var render = require('../render.js')({
+  onclick: function() {
+    state = {n: state.n+1};
+    loop.update(state);
   }
-}
+});
+var loop = main(state, render, {
+  create: require('virtual-dom/create-element'),
+  diff: require('virtual-dom/diff'),
+  patch: require('virtual-dom/patch')
+});
+
+var root = document.getElementById('content');
+root.innerHTML = '';
+root.appendChild(loop.target);
+
+```
+
+# Server
+
+```js
+var ecstatic = require('ecstatic')({root: __dirname + '/public'});
+var http = require('http');
+var vToHtml = require('vdom-to-html');
+var hyperstream = require('hyperstream');
+var fs = require('fs');
+var path = require('path');
+var render = require('./render.js')({});
+
+http.createServer(function(req, res) {
+  
+  // create vtree then turn it into a string
+  if (req.url === '/') {
+    res.setHeader('Content-Type', 'text/html');
+    fs.createReadStream(path.join(__dirname, 'public/index.html'))
+      .pipe( hyperstream({
+        '#content': vToHtml( render({n: 0}) )
+      }))
+      .pipe(res)
+    ;
+  }
+  else {
+    ecstatic(req, res);
+  }
+
+}).listen(8000);
+console.log('listening on :8000');
+```
+
+# render.js
+
+```js
+var h = require('virtual-dom/h');
+
+module.exports = function(handlers) {
+
+  return function render (state) {
+    return h('div', [
+      h('h1', 'clicked ' + state.n + ' times'),
+      h('button', { onclick: handlers.onclick }, 'click me!')
+    ]);
+  };
+
+};
 ```
 
 # contributing
