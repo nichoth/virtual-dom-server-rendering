@@ -6,7 +6,7 @@
 
 See https://github.com/Raynos/mercury/issues/55
 
-This version serializes the inital state from the server and sends it to the client using `json-globals`.
+This version serializes the inital state from the server and sends it to the client using `json-globals`. The server starts the click count at a random number which gets sent to the client as the initial state.
 
 # quick start
 
